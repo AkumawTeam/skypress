@@ -5,19 +5,22 @@ cache_url: "/cache/gitsplit"
 splits:
   -
     prefix: "src/Core"
-    target: "https://${GH_TOKEN}@github.com/OrmeeCommunity/skypress-core.git"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-core.git"
   -
     prefix: "src/CustomPostType"
-    target: "https://${GH_TOKEN}@github.com/OrmeeCommunity/skypress-custom-post-type.git"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-custom-post-type.git"
   -
     prefix: "src/Taxonomy"
-    target: "https://${GH_TOKEN}@github.com/OrmeeCommunity/skypress-taxonomy.git"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-taxonomy.git"
   -
     prefix: "src/Headless"
-    target: "https://${GH_TOKEN}@github.com/OrmeeCommunity/skypress-headless.git"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-headless.git"
   -
     prefix: "src/Menu"
-    target: "https://${GH_TOKEN}@github.com/OrmeeCommunity/skypress-menu.git"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-menu.git"
+  -
+    prefix: "src/Theme"
+    target: "https://${GH_TOKEN}@github.com/AkumawTeam/skypress-theme.git"
 
 
 origins:

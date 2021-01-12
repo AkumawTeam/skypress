@@ -3,7 +3,7 @@
 ## Getting started
 
 ```sh
-composer require ormeecommunity/skypress
+composer require akumawteam/skypress
 ```
 
 ### Use a plugin

@@ -1,5 +1,5 @@
 {
-    "name": "ormeecommunity/skypress-core",
+    "name": "akumawteam/skypress-core",
     "description": "",
     "license": "MIT",
     "type": "library",
@@ -16,7 +16,7 @@
     "authors": [
         {
             "name": "Gmulti",
-            "email": "thomasdeneulin@gmail.com"
+            "email": "thomas@akumaw.com"
         }
     ],
     "config": {

@@ -3,7 +3,7 @@
 ## Getting started
 
 ```sh
-composer require ormeecommunity/skypress-custom-post-type
+composer require akumawteam/skypress-custom-post-type
 ```
 
 ### Use a plugin
@@ -14,7 +14,7 @@ composer require ormeecommunity/skypress-custom-post-type
 /*
 Plugin Name: Example Skypress
 Description: Example Skypress
-Author: OrmeeCommunity
+Author: AkumawTeam
 Domain Path: /languages/
 */
 

@@ -1,12 +1,16 @@
 {
-    "name": "ormeecommunity/skypress-custom-post-type",
+    "name": "akumawteam/skypress-custom-post-type",
     "description": "",
     "license": "MIT",
     "type": "library",
     "require": {
         "php": ">=7.2",
-        "ormeecommunity/skypress-core" : "*"
+        "akumawteam/skypress-core" : "*"
     },
+    "require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"friendsofphp/php-cs-fixer": "^2.17"
+	},
     "autoload": {
         "psr-4": {
             "Skypress\\CustomPostType\\": ""
@@ -15,7 +19,7 @@
     "authors": [
         {
             "name": "Gmulti",
-            "email": "thomasdeneulin@gmail.com"
+            "email": "thomas@akumaw.com"
         }
     ],
     "config": {

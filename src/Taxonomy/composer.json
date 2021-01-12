@@ -1,11 +1,11 @@
 {
-    "name": "ormeecommunity/skypress-taxonomy",
+    "name": "akumawteam/skypress-taxonomy",
     "description": "",
     "license": "MIT",
     "type": "library",
     "require": {
         "php": ">=7.2",
-        "ormeecommunity/skypress-core" : "*"
+        "akumawteam/skypress-core" : "*"
     },
     "autoload": {
         "psr-4": {
@@ -15,7 +15,7 @@
     "authors": [
         {
             "name": "Gmulti",
-            "email": "thomasdeneulin@gmail.com"
+            "email": "thomas@akumaw.com"
         }
     ],
     "config": {

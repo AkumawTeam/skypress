@@ -3,5 +3,5 @@
 ## Getting started
 
 ```sh
-composer require ormeecommunity/skypress-headless
+composer require akumawteam/skypress-headless
 ```

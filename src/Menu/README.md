@@ -3,7 +3,7 @@
 ## Getting started
 
 ```sh
-composer require ormeecommunity/skypress-menu
+composer require akumawteam/skypress-menu
 ```
 
 ### Add a menu

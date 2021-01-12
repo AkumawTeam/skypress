@@ -3,7 +3,7 @@
 ## Getting started
 
 ```sh
-composer require ormeecommunity/skypress-taxonomy
+composer require akumawteam/skypress-taxonomy
 ```
 
 ### Add a taxonomy
