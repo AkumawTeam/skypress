@@ -8,5 +8,5 @@ abstract class KernelTypeExecution
 {
     const PLUGIN = 'plugin';
 
-    const DEFAULT = 'default';
+    const DEFAULT_EXEC = 'default';
 }

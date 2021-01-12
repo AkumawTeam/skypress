@@ -20,6 +20,9 @@ abstract class Kernel
 
     protected static $options = [
         'custom-post-type' => false,
+        'taxonomy' => false,
+        'menu' => false,
+        'theme' => false,
     ];
 
     public static function setContainer(ManageContainer $container)
@@ -131,7 +134,7 @@ abstract class Kernel
     /**
      * Build module headless.
      */
-    protected static function buildHeadless()
+    protected static function buildHeadlessModule()
     {
         self::getContainer()->set('ApiMenu', '\Skypress\Headless\Hooks\Api\Menu', [
             \Skypress\Headless\Settings::getBaseEndpoint(),
@@ -183,20 +186,24 @@ abstract class Kernel
         }
 
         if (true === self::$options['headless']) {
-            self::buildHeadless();
+            self::buildHeadlessModule();
+        }
+
+        if (true === self::$options['theme']) {
+            self::buildThemeModule();
         }
     }
 
     /**
      * @return Kernel
      */
-    public static function execute($type = KernelTypeExecution::DEFAULT, $data, $options = [])
+    public static function execute($type = KernelTypeExecution::DEFAULT_EXEC, $data, $options = [])
     {
         self::$options = array_merge(self::$options, $options);
 
         self::buildContainer();
 
-        if (KernelTypeExecution::DEFAULT === $type) {
+        if (KernelTypeExecution::DEFAULT_EXEC === $type) {
             self::handleHooks();
 
             return;

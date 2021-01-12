@@ -77,7 +77,7 @@ class Loader implements LoaderConfiguration
         } catch (\Exception $e) {
             return null;
         }
-
+        
         if (!$this->getFinder()->hasResults()) {
             return null;
         }
