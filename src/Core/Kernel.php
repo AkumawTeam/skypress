@@ -166,6 +166,26 @@ abstract class Kernel
     }
 
     /**
+     * Build module menu.
+     */
+    protected static function buildThemeModule()
+    {
+        self::getContainer()->set('LoaderTheme', '\Skypress\Theme\Configuration\Loader', [
+            self::getContainer()->get('LoaderConfiguration'),
+        ]);
+
+        self::getContainer()->getBuilder()->getDefinition('LoaderTheme')->setShared(false);
+
+        self::getContainer()->set('EnqueueCss', '\Skypress\Theme\Hooks\EnqueueCss', [
+            self::getContainer()->get('LoaderTheme'),
+        ]);
+
+        // @TODO : Too symfony related
+        self::getContainer()->getBuilder()->getDefinition('EnqueueCss')
+            ->addTag('hooks');
+    }
+
+    /**
      * Build Skypress Container.
      */
     protected static function buildContainer()
