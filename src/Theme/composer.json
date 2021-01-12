@@ -1,0 +1,31 @@
+{
+    "name": "akumawteam/skypress-theme",
+    "description": "",
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": ">=7.2",
+        "akumawteam/skypress-core" : "*"
+    },
+    "require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"friendsofphp/php-cs-fixer": "^2.17"
+	},
+    "autoload": {
+        "psr-4": {
+            "Skypress\\Theme\\": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "Gmulti",
+            "email": "thomas@akumaw.com"
+        }
+    ],
+    "config": {
+        "process-timeout": 1800,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
