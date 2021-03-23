@@ -23,6 +23,7 @@ abstract class Kernel
         'taxonomy' => false,
         'menu' => false,
         'theme' => false,
+        'headless' => false
     ];
 
     public static function setContainer(ManageContainer $container)
