@@ -14,7 +14,7 @@ composer require akumawteam/skypress
 /*
 Plugin Name: Example Skypress
 Description: Example Skypress
-Author: OrmeeCommunity
+Author: Thomas Deneulin
 Domain Path: /languages/
 */
 

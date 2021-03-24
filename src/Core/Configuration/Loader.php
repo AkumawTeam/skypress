@@ -8,16 +8,39 @@ use Symfony\Component\Finder\Finder;
 
 class Loader implements LoaderConfiguration
 {
-    public function __construct()
+    public function __construct($rootDirectory = '')
     {
-        $this->setDirectoryConfiguration(WPMU_PLUGIN_DIR . '/skypress');
+        $this->setRootDirectory($rootDirectory);
+        $this->setDirectoryConfiguration($this->getRootDirectory() . '/skypress');
         $this->typeStrategy = TypeStrategy::JSON;
         $this->setDefaultFinder();
+    }
+
+    public function getRootDirectory(){
+        return $this->rootDirectory;
+    }
+
+    protected function setDefaultRootDirectory(){
+        $this->rootDirectory = WPMU_PLUGIN_DIR;
+
+        return $this;
+    }
+
+    public function setRootDirectory($rootDirectory){
+        if(empty($rootDirectory) || $rootDirectory === null){
+            $this->setDefaultRootDirectory();
+        }
+        else{
+            $this->rootDirectory = $rootDirectory;
+        }
+
+        return $this;
     }
 
     protected function setDefaultFinder()
     {
         $this->setFinder(new Finder());
+        return $this;
     }
 
     public function setFinder($finder)

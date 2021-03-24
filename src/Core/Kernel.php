@@ -312,7 +312,7 @@ abstract class Kernel
         if(isset(self::$data['namespace'], self::$data['root']) && self::$data['namespace'] !== null && self::$data['root'] !== null){
             self::buildContainerSkypress();
         }
-
+        
         if (KernelTypeExecution::DEFAULT_EXEC === $type) {
             self::handleHooks();
             return;

@@ -10,6 +10,9 @@ use Skypress\Theme\Entity\Css;
 
 class Loader implements LoaderConfiguration
 {
+    /**
+     * @param LoaderConfiguration $loader
+     */
     public function __construct(LoaderConfiguration $loader)
     {
         $loader->setDirectoryConfiguration(sprintf('%s/%s', get_template_directory(), 'skypress'));
@@ -17,6 +20,12 @@ class Loader implements LoaderConfiguration
         $this->loader = $loader;
     }
 
+    /**
+     *
+     * @param Theme $theme
+     * @param array $data
+     * @return Theme
+     */
     protected function initCssConfiguration(Theme $theme, array $data){
         foreach ($data as $key => $item) {
             $css = new Css($item);
@@ -26,6 +35,10 @@ class Loader implements LoaderConfiguration
         return $theme;
     }
 
+    /**
+     *
+     * @return Theme
+     */
     public function getData()
     {
         $data = $this->loader->getData();
