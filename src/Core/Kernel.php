@@ -16,13 +16,14 @@ abstract class Kernel
 {
     protected static $container = null;
 
-    protected static $data = ['slug' => null, 'file' => null];
+    protected static $data = ['slug' => null, 'file' => null, 'root' => null];
 
     protected static $options = [
         'custom-post-type' => false,
         'taxonomy' => false,
         'menu' => false,
         'theme' => false,
+        'headless' => false
     ];
 
     public static function setContainer(ManageContainer $container)
@@ -190,26 +191,28 @@ abstract class Kernel
      */
     protected static function buildContainer()
     {
-        self::getContainer()->set('LoaderConfiguration', 'Skypress\Core\Configuration\Loader');
+        self::getContainer()->set('LoaderConfiguration', 'Skypress\Core\Configuration\Loader' , [
+            'rootDirectory' => self::$data['root']
+        ]);
         self::getContainer()->getBuilder()->getDefinition('LoaderConfiguration')->setShared(false);
 
-        if (true === self::$options['custom-post-type']) {
+        if (isset(self::$options['custom-post-type']) && true === self::$options['custom-post-type']) {
             self::buildCustomPostType();
         }
 
-        if (true === self::$options['taxonomy']) {
+        if (isset(self::$options['taxonomy']) && true === self::$options['taxonomy']) {
             self::buildTaxonomy();
         }
 
-        if (true === self::$options['menu']) {
+        if (isset(self::$options['menu']) && true === self::$options['menu']) {
             self::buildMenu();
         }
 
-        if (true === self::$options['headless']) {
+        if (isset(self::$options['headless']) && true === self::$options['headless']) {
             self::buildHeadlessModule();
         }
 
-        if (true === self::$options['theme']) {
+        if (isset(self::$options['theme']) && true === self::$options['theme']) {
             self::buildThemeModule();
         }
     }
@@ -220,17 +223,17 @@ abstract class Kernel
     public static function execute($type = KernelTypeExecution::DEFAULT_EXEC, $data, $options = [])
     {
         self::$options = array_merge(self::$options, $options);
-
+        self::$data = array_merge(self::$data, $data);
+        
         self::buildContainer();
 
         if (KernelTypeExecution::DEFAULT_EXEC === $type) {
             self::handleHooks();
-
             return;
         }
 
         if (KernelTypeExecution::PLUGIN === $type && isset($data['file']) && null !== $data['file']) {
-            self::$data = array_merge($data, self::$data);
+            
             add_action('plugins_loaded', [__CLASS__, 'handleHooksPlugin']);
             register_activation_hook($data['file'], [__CLASS__, 'handleHooksPlugin']);
             register_deactivation_hook($data['file'], [__CLASS__, 'handleHooksPlugin']);
