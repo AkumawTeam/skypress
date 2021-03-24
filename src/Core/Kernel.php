@@ -6,6 +6,7 @@ defined('ABSPATH') or die('Cheatin&#8217; uh?');
 
 use Skypress\Core\Container\ManageContainer;
 use Skypress\Core\Container\ContainerSymfony;
+use Skypress\Core\Container\ContainerSkypress;
 use Skypress\Core\Hooks\ExecuteHooksBackend;
 use Skypress\Core\Hooks\ExecuteHooksFrontend;
 use Skypress\Core\Hooks\ExecuteHooks;
@@ -15,8 +16,15 @@ use Skypress\Core\Hooks\DeactivationHook;
 abstract class Kernel
 {
     protected static $container = null;
+    
+    protected static $containerSkypress = null;
 
-    protected static $data = ['slug' => null, 'file' => null];
+    protected static $data = [
+        'slug' => null, 
+        'file' => null, 
+        'root' => null,
+        'namespace' => null
+    ];
 
     protected static $options = [
         'custom-post-type' => false,
@@ -36,6 +44,10 @@ abstract class Kernel
         return new ContainerSymfony();
     }
 
+    protected static function getDefaultContainerSkypress(){
+        return new ContainerSkypress();
+    }
+
     public static function getContainer()
     {
         if (null === self::$container) {
@@ -45,10 +57,41 @@ abstract class Kernel
         return self::$container;
     }
 
+    public static function getContainerSkypress()
+    {
+        if (null === self::$containerSkypress) {
+            self::$containerSkypress = self::getDefaultContainerSkypress();
+        }
+
+        return self::$containerSkypress;
+    }
+
     public static function handleHooks()
     {
         foreach (self::getContainer()->getServicesByTag('hooks') as $id => $tags) {
             $class = self::getContainer()->getBuilder()->get($id);
+
+            switch (true) {
+                case $class instanceof ExecuteHooksBackend:
+                    if (is_admin()) {
+                        $class->hooks();
+                    }
+                    break;
+
+                case $class instanceof ExecuteHooksFrontend:
+                    if (!is_admin()) {
+                        $class->hooks();
+                    }
+                    break;
+
+                case $class instanceof ExecuteHooks:
+                    $class->hooks();
+                    break;
+            }
+        }
+
+        foreach (self::getContainerSkypress()->getActions() as $key => $class) {
+            $class = new $class();
 
             switch (true) {
                 case $class instanceof ExecuteHooksBackend:
@@ -90,6 +133,45 @@ abstract class Kernel
                     $class->activation();
                 }
                 break;
+        }
+    }
+
+    protected static function buildContainerSkypress(){
+        self::getClasses(self::$data['root'] . '/src/Services', 'services', 'Services\\');
+        self::getClasses(self::$data['root'] . '/src/Actions', 'actions', 'Actions\\');
+    }
+
+    /**
+     * @static
+     * @param string $path
+     * @param string $type
+     * @param string $namespace
+     * @return void
+     */
+    public static function getClasses($path, $type, $namespace = '')
+    {
+        if(!file_exists($path)){
+            return;
+        }
+
+        $files      = array_diff(scandir($path), [ '..', '.' ]);
+        foreach ($files as $filename) {
+            $pathCheck = $path . '/' . $filename;
+            if (is_dir($pathCheck)) {
+                self::getClasses($pathCheck, $type, $namespace . $filename . '\\');
+                continue;
+            }
+
+            $data = '\\' . self::$data['namespace'] . '\\' . $namespace . str_replace('.php', '', $filename);
+
+            switch ($type) {
+                case 'services':
+                    self::getContainerSkypress()->setService($data);
+                    break;
+                case 'actions':
+                    self::getContainerSkypress()->setAction($data);
+                    break;
+            }
         }
     }
 
@@ -189,28 +271,30 @@ abstract class Kernel
     /**
      * Build Skypress Container.
      */
-    protected static function buildContainer()
-    {
-        self::getContainer()->set('LoaderConfiguration', 'Skypress\Core\Configuration\Loader');
+    protected static function buildContainer(){
+
+        self::getContainer()->set('LoaderConfiguration', 'Skypress\Core\Configuration\Loader' , [
+            'rootDirectory' => self::$data['root']
+        ]);
         self::getContainer()->getBuilder()->getDefinition('LoaderConfiguration')->setShared(false);
 
-        if (true === self::$options['custom-post-type']) {
+        if (isset(self::$options['custom-post-type']) && true === self::$options['custom-post-type']) {
             self::buildCustomPostType();
         }
 
-        if (true === self::$options['taxonomy']) {
+        if (isset(self::$options['taxonomy']) && true === self::$options['taxonomy']) {
             self::buildTaxonomy();
         }
 
-        if (true === self::$options['menu']) {
+        if (isset(self::$options['menu']) && true === self::$options['menu']) {
             self::buildMenu();
         }
 
-        if (true === self::$options['headless']) {
+        if (isset(self::$options['headless']) && true === self::$options['headless']) {
             self::buildHeadlessModule();
         }
 
-        if (true === self::$options['theme']) {
+        if (isset(self::$options['theme']) && true === self::$options['theme']) {
             self::buildThemeModule();
         }
     }
@@ -221,17 +305,21 @@ abstract class Kernel
     public static function execute($type = KernelTypeExecution::DEFAULT_EXEC, $data, $options = [])
     {
         self::$options = array_merge(self::$options, $options);
-
+        self::$data = array_merge(self::$data, $data);
+        
         self::buildContainer();
+
+        if(isset(self::$data['namespace'], self::$data['root']) && self::$data['namespace'] !== null && self::$data['root'] !== null){
+            self::buildContainerSkypress();
+        }
 
         if (KernelTypeExecution::DEFAULT_EXEC === $type) {
             self::handleHooks();
-
             return;
         }
 
         if (KernelTypeExecution::PLUGIN === $type && isset($data['file']) && null !== $data['file']) {
-            self::$data = array_merge($data, self::$data);
+            
             add_action('plugins_loaded', [__CLASS__, 'handleHooksPlugin']);
             register_activation_hook($data['file'], [__CLASS__, 'handleHooksPlugin']);
             register_deactivation_hook($data['file'], [__CLASS__, 'handleHooksPlugin']);
