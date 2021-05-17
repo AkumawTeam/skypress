@@ -302,7 +302,7 @@ abstract class Kernel
     /**
      * @return Kernel
      */
-    public static function execute($type = KernelTypeExecution::DEFAULT_EXEC, $data, $options = [])
+    public static function execute($type = KernelTypeExecution::DEFAULT_EXEC, $data = [], $options = [])
     {
         self::$options = array_merge(self::$options, $options);
         self::$data = array_merge(self::$data, $data);
