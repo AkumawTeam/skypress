@@ -29,7 +29,12 @@ class EnqueueCss implements ExecuteHooks
 
         foreach ($theme->getCssConfiguration() as $key => $item) {
             $md5 = md5($item->getUri());
-            wp_enqueue_style(sprintf('load-css-%s', $md5), sprintf('%s/%s', get_template_directory_uri(), $item->getUri()), false);
+            wp_enqueue_style(
+                sprintf('load-css-%s', $md5), 
+                sprintf('%s/%s', get_template_directory_uri(), $item->getUri()), 
+                [],
+                $item->getVersion()
+            );
         }
     }
 }

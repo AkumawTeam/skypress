@@ -14,6 +14,10 @@ class Css
         if(isset($options['uri'])){
             $this->setUri($options['uri']);
         }
+        
+        if(isset($options['version'])){
+            $this->setVersion($options['version']);
+        }
     }
 
     public function setUri($uri)
@@ -26,6 +30,18 @@ class Css
     public function getUri()
     {
         return $this->uri;
+    }
+
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
     }
 
 }
